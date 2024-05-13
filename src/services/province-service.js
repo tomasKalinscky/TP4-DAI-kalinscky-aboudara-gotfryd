@@ -1,42 +1,38 @@
-import provincias from "../entities/province.js";
-import ValidacionesHelper from "../helpers/validaciones-helper.js";
+import provincias from '../entities/province.js';
 
-class ProvinceService {
+const getAllProvinces = async () => {
+  return provincias;
+};
 
-    getAllAsync = () => {
-        //creamos array vacio
-        // recibimos datos de llamada
-        // poblamos el array 
-    }
-    getAllProvinces() {
-        return provincias;
-    }
+const getProvinceById = async (id) => {
+  return provincias.find(provincia => provincia.id === id);
+};
 
-    getProvinceById(id) {
-        return provincias.find(provincia => provincia.id === parseInt(id));
-    }
+const addProvince = async (newProvince) => {
+  provincias.push(newProvince);
+  return newProvince;
+};
 
-    addProvince(newProvince) {
-        // Validar nueva provincia
-        const validationError = this.validateProvince(newProvince);
-        if (validationError) {
-            return { success: false, error: validationError };
-        }
-        // Generar ID para la nueva provincia
-        const id = provincias.length + 1;
-        newProvince.id = id;
-        // Agregar nueva provincia a la lista
-        provincias.push(newProvince);
-        return { success: true, province: newProvince };
-    }
+const updateProvince = async (updatedProvince) => {
+  const index = provincias.findIndex(provincia => provincia.id === updatedProvince.id);
+  if (index !== -1) {
+    provincias[index] = updatedProvince;
+    return updatedProvince;
+  } else {
+    throw new Error("Provincia no encontrada");
+  }
+};
 
-    updateProvince(updatedProvince) {
-        // Validar provincia existente
-        const existingProvince = this.getProvinceById(updatedProvince.id);
-        if (!existingProvince) {
-            return { success: false, error: "No existe una provincia con ese ID." };
-        }
-        // Validar datos actualizados
-        const validationError = this.validateProvince(updatedProvince);
-        if (validationError) {
+const deleteProvince = async (id) => {
+  const index = provincias.findIndex(provincia => provincia.id === id);
+  if (index !== -1) {
+    const deletedProvince = provincias.splice(index, 1)[0];
+    return deletedProvince;
+  } else {
+    throw new Error("Provincia no encontrada");
+  }
+};
+
+export default { getAllProvinces, getProvinceById, addProvince, updateProvince, deleteProvince };
+
 
